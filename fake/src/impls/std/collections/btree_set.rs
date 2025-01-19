@@ -15,3 +15,18 @@ where
         m
     }
 }
+
+impl<T, E, L> Dummy<(E, L)> for BTreeSet<T>
+where
+    T: Dummy<E> + Ord,
+    usize: Dummy<L>,
+{
+    fn dummy_with_rng<R: Rng + ?Sized>(config: &(E, L), rng: &mut R) -> Self {
+        let len = config.1.fake_with_rng(rng);
+        let mut m = BTreeSet::new();
+        for _ in 0..len {
+            m.insert(config.0.fake_with_rng(rng));
+        }
+        m
+    }
+}
